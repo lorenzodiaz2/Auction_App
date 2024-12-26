@@ -1,9 +1,9 @@
 const express = require("express");
-require('dotenv').config();
 const jwt = require("jsonwebtoken");
 const db = require("./database.js");
 const bcrypt = require('bcryptjs');
 const router = express.Router();
+JWT_SECRET='supersecretkey12345!@';
 
 
 
@@ -82,7 +82,7 @@ router.post("/signin", async (req, res) => {
     if (user && await bcrypt.compare(password, user.password)) {
 
       const data = { id: user._id.toString(), username };
-      const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: 86400 });
+      const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 });
 
       res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
       res.redirect("/dashboard.html");

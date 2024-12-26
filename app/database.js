@@ -1,6 +1,5 @@
-require('dotenv').config();
 const { MongoClient } = require("mongodb");
-const MONGODB_URI = process.env.MONGODB_URI;
+MONGODB_URI='mongodb://mongosrv:27017';
 const DB_NAME = "database";
 let cachedDb;
 

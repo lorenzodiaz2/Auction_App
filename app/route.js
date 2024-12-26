@@ -4,6 +4,8 @@ const router = express.Router();
 const db = require("./database.js");
 const { ObjectId } = require("mongodb");
 const bcrypt = require('bcryptjs');
+JWT_SECRET='supersecretkey12345!@';
+
 
 
 // ESTRARRE QUALCHE MIDDLEWARE PER ALLEGERIRE IL CODICE
@@ -16,7 +18,7 @@ const authenticateToken = (req, res, next) => {
         return res.status(401).json({ message: "Access denied" });
     } 
   
-    jwt.verify(token, 'supersecretkey12345!@', (err, decoded) => {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid token" });
       }
@@ -536,11 +538,10 @@ try {
         return res.status(401).json({ status: 'error', message: 'Unauthorized. Please log in again.' });
     }
 
-    const secretKey = 'supersecretkey12345!@'; // Use environment variable
     let decoded;
 
     try {
-        decoded = jwt.verify(token, secretKey);
+        decoded = jwt.verify(token, JWT_SECRET);
     } catch (err) {
         return res.status(401).json({ status: 'error', message: 'Invalid or expired token. Please log in again.' });
     }

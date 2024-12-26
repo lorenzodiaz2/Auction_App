@@ -8,9 +8,6 @@ services:
       - "3000:3000"
     volumes:
       - ./app:/usr/src/app
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - MONGODB_URI=mongodb://mongo:27017
     links:
       - "mongo:mongosrv"
   mongo:
