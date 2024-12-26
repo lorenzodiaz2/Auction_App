@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const db = require("./database.js");
 const bcrypt = require('bcryptjs');
 const router = express.Router();
-JWT_SECRET='supersecretkey12345!@';
+const JWT_SECRET='supersecretkey12345!@';
 
 
 

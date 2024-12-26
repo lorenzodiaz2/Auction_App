@@ -4,7 +4,7 @@ const router = express.Router();
 const db = require("./database.js");
 const { ObjectId } = require("mongodb");
 const bcrypt = require('bcryptjs');
-JWT_SECRET='supersecretkey12345!@';
+const JWT_SECRET='supersecretkey12345!@';
 
 
 
