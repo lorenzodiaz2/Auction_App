@@ -1,4 +1,4 @@
-# My Auction App
+# Auction App
 
 This is a Node.js application that uses MongoDB as a database, all managed via Docker.
 

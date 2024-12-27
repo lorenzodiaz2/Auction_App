@@ -3,9 +3,7 @@ const bcrypt = require('bcryptjs');
 const { ObjectId } = require("mongodb");
 
 
-
 module.exports = {
-
   fillDatabase: async () => {
     const database = await db.connectToDatabase();
     await database.collection('users').deleteMany({});
@@ -453,54 +451,6 @@ module.exports = {
       } 
     ]     
     ;
-
-/*
-    for (const auction of auctions) {
-      let result = await database.collection("auctions").insertOne(auction);
-      if (!result.insertedId) {
-        continue;
-      }
-      let bids = [];
-      let auctionId = result.insertedId.toString();
-      let date = new Date(auction.expiryDate.replace(' at ', 'T'));
-      let currentDate = new Date();
-      currentDate.setHours(currentDate.getHours() + 1);
-
-      if (date > currentDate) {
-        date = currentDate;
-      }
-
-      let price = auction.currentPrice + 401;
-      for (let i = 0; i < 10; i++) {
-        let randomUserBidderIndex = Math.floor(Math.random() * 15);
-
-        if (i === 0 && auction.creator === users[randomUserBidderIndex].username) {
-          i -= 1;
-          continue;
-        }
-
-        if (i > 0 && bids[i-1].user === users[randomUserBidderIndex].username) {
-          i -= 1;
-          continue;
-        }
-
-        date.setSeconds(date.getSeconds() - 853);
-        bids.push({
-            auctionId,
-            user: users[randomUserBidderIndex].username,
-            price,
-            date: `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()} at ${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:${date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()}`
-        });
-        if (i === 0) {
-          await database.collection('auctions').updateOne({ _id: new ObjectId(auctionId) }, { $set: {currentPrice: price, winningUser: users[randomUserBidderIndex].username} });
-        }
-        price -= Math.floor(Math.random() * 19) + 20;
-      }
-      bids.sort((bid1, bid2) => bid1.price - bid2.price);
-      await database.collection('bids').insertMany(bids);  
-    }
-
-*/
 
 
     for (const auction of auctions) {
