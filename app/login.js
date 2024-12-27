@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
     const existingUser = await database.collection("users").findOne({ username });
 
     if (existingUser) {
-      return res.status(409).json({ status : 'error',  message: `User "${username}" already existing!` });
+      return res.status(409).json({ status : 'error',  message: `User "${username}" already existing! Please choose another username` });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -51,7 +51,7 @@ router.post("/signup", async (req, res) => {
     const result = await database.collection("users").insertOne(newUser);
 
     if (result.acknowledged && result.insertedId) {
-      const data = { id: user._id.toString(), username };
+      const data = { id: result.insertedId.toString(), username };
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 });
 
       res.cookie("token", token, { httpOnly: true});

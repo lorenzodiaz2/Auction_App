@@ -7,10 +7,6 @@ const bcrypt = require('bcryptjs');
 const JWT_SECRET='supersecretkey12345!@';
 
 
-
-// ESTRARRE QUALCHE MIDDLEWARE PER ALLEGERIRE IL CODICE
-// TOGLIERE I COMMENTI
-
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.token;
     
@@ -49,10 +45,10 @@ router.get('/users/', authenticateToken, async (req, res) => {
 
         if (users.length > 0) {
             const filteredUsers = users.map(user => ({
-                id: user._id.toString(),
-                username: user.username,
-                name: user.name,
-                surname: user.surname
+                Id: user._id.toString(),
+                Username: user.username,
+                Name: user.name,
+                Surname: user.surname
             }));
             return res.status(200).json(filteredUsers);
         } else {
@@ -82,9 +78,9 @@ router.get('/users/:id', authenticateToken, async (req, res) => {
 
         if (user) {
             res.status(200).json({
-                username: user.username,
-                name: user.name,
-                surname: user.surname
+                Username: user.username,
+                Name: user.name,
+                Surname: user.surname
             });
         } else {
             res.status(404).json({ status: 'error', message: 'User not found' });
@@ -120,8 +116,9 @@ router.get('/auctions', authenticateToken, async (req, res) => {
                 Id: auction._id.toString(),
                 Title: auction.title,
                 Description: auction.description,
+                StartingPrice: `$ ${auction.startingPrice}.00`,
                 CurrentPrice: `$ ${auction.currentPrice}.00`,
-                ExpiryDate: auction.expiryDate,
+                ExpirationDate: auction.expiryDate,
                 WinningUser: auction.winningUser ? auction.winningUser : 'No bidders yet',
                 Creator: auction.creator
             }));
@@ -165,6 +162,7 @@ router.post('/auctions', authenticateToken, async (req, res) => {
         let newAuction = {
             title,
             description,
+            startingPrice: currentPrice,
             currentPrice,
             expiryDate: expiryDate.replace('T', ' at '),
             winningUser: null,
@@ -181,8 +179,9 @@ router.post('/auctions', authenticateToken, async (req, res) => {
                     Id: result.insertedId,
                     Title: newAuction.title,
                     Description: newAuction.description,
+                    StartingPrice: `$ ${newAuction.startingPrice}.00`,
                     CurrentPrice: `$ ${newAuction.currentPrice}.00`,
-                    ExpiryDate: newAuction.expiryDate,
+                    ExpirationDate: newAuction.expiryDate,
                     WinningUser: newAuction.winningUser,
                     Creator: newAuction.creator
                 }
@@ -216,8 +215,9 @@ router.get('/auctions/:id', authenticateToken, async (req, res) => {
             res.status(200).json({
                 Title: auction.title,
                 Description: auction.description,
+                StartingPrice: `$ ${auction.startingPrice}.00`,
                 CurrentPrice: `$ ${auction.currentPrice}.00`,
-                ExpiryDate: auction.expiryDate,
+                ExpirationDate: auction.expiryDate,
                 WinningUser: auction.winningUser ? auction.winningUser : 'No bidders yet',
                 Creator: auction.creator
             });
@@ -279,8 +279,9 @@ router.put('/auctions/:id', authenticateToken, async (req, res) => {
                     Id: auctionId,
                     Title: (updateFields.title ? updateFields.title : auction.title),
                     Description: (updateFields.description ? updateFields.description : auction.description),
+                    StartingPrice: `$ ${auction.startingPrice}.00`,
                     CurrentPrice: `$ ${auction.currentPrice}.00`,
-                    ExpiryDate: auction.expiryDate,
+                    ExpirationDate: auction.expiryDate,
                     WinningUser: auction.winningUser ? auction.winningUser : 'No bidders yet',
                     Creator: auction.creator
                 }
@@ -353,9 +354,9 @@ router.get('/auctions/:id/bids', authenticateToken, async (req, res) => {
         if (bids.length > 0) {
             const filteredBids = bids.map(bid => ({
                 BidId: bid._id.toString(),
-                User: bid.user,
-                Price: `$ ${bid.price}.00`,
-                Date: bid.date
+                BidderUser: bid.user,
+                BidPrice: `$ ${bid.price}.00`,
+                BidDate: bid.date
             }));
             return res.status(200).json(filteredBids);
         } else {
@@ -413,17 +414,18 @@ router.post('/auctions/:id/bids', authenticateToken, async (req, res) => {
                                     AuctionId: auctionId,
                                     Title: auction.title,
                                     Description: auction.description,
+                                    StartingPrice: `$ ${auction.startingPrice}.00`,
                                     CurrentPrice: `$ ${newPrice}.00`,
-                                    ExpiryDate: auction.expiryDate,
+                                    ExpirationDate: auction.expiryDate,
                                     WinningUser: auction.winningUser ? auction.winningUser : 'No bidders yet',
                                     Creator: auction.creator
                                 },
                                 bid: {
                                     BidId: bidResult.insertedId,
                                     AuctionId: auctionId,
-                                    User: req.user.username,
-                                    Price: `$ ${newPrice}.00`,
-                                    Date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1}-${currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate()} at ${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes() < 10 ? `0${currentDate.getMinutes()}` : currentDate.getMinutes()}:${currentDate.getSeconds() < 10 ? `0${currentDate.getSeconds()}` : currentDate.getSeconds()}`
+                                    BidderUser: req.user.username,
+                                    BidPrice: `$ ${newPrice}.00`,
+                                    BidDate: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1}-${currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate()} at ${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes() < 10 ? `0${currentDate.getMinutes()}` : currentDate.getMinutes()}:${currentDate.getSeconds() < 10 ? `0${currentDate.getSeconds()}` : currentDate.getSeconds()}`
                                 }
                             })
                         } else {
@@ -462,9 +464,9 @@ router.get('/bids/:id', authenticateToken, async (req, res) => {
         if (bid) {
             return res.status(200).json({
                     AuctionId: bid.auctionId,
-                    User: bid.user,
-                    Price: `$ ${bid.price}.00`,
-                    Date: bid.date
+                    BidderUser: bid.user,
+                    BidPrice: `$ ${bid.price}.00`,
+                    BidDate: bid.date
                 }
             );
         } else {

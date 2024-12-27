@@ -43,14 +43,15 @@ createApp({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newUser),
         });
-        const data = await response.json();
+        
         if (response.ok) {
-          this.messages.signin = 'user successfully created!';
+          this.messages.signup = 'user successfully created!';
           setTimeout(() => {
             window.location.href = response.url;
           }, 2000);
           this.signupForm = { username: '', name: '', surname: '', password: '' };
         } else {
+          const data = await response.json();
           this.errorMessages.signup = data.message;
         }
       } catch (error) {
