@@ -6,6 +6,13 @@ const { ObjectId } = require("mongodb");
 module.exports = {
   fillDatabase: async () => {
     const database = await db.connectToDatabase();
+
+    const userCount = await database.collection('users').countDocuments();
+    const auctionCount = await database.collection('auctions').countDocuments();
+    if (userCount > 0 || auctionCount > 0) {
+      return;
+    }
+
     await database.collection('users').deleteMany({});
     await database.collection('auctions').deleteMany({});
     await database.collection('bids').deleteMany({});

@@ -2,8 +2,11 @@ services:
   app:
     container_name: diaz_app
     build: .
+    command: nodemon --watch /usr/src/app -e js app.js
     ports:
       - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
     links:
       - "mongo:mongosrv"
   mongo:
