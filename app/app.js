@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const login = require("./login.js");
 const router = require("./route.js");
+const filldb = require("./fillDatabase.js");
 
 const app = express();
 
@@ -14,4 +15,13 @@ app.use(cookieParser());
 app.use("/api/auth", login);
 app.use("/api", router);
 
-app.listen(3000, () => console.log("Web server started on http://localhost:3000"));
+app.listen(3000, async () => {
+    try {
+        await filldb.fillDatabase();
+        console.log("Database initialized");
+    } catch (error) {
+        console.error("Error initializing database:", error);
+    }
+    console.log("Web server started on http://localhost:3000");
+});
+

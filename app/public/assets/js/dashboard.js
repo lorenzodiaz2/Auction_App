@@ -49,6 +49,7 @@ createApp({
     async setActiveSection(section) {
       this.activeSection = section;
       this.search = {id: '', query: '', removeId: ''};
+      this.bidForm = {auctionId: '', newPrice: null};
       this.objects = null;
       this.object = null;
       this.errorMessages = {id: '', query: '', insert:'', delete: '', modify: ''};

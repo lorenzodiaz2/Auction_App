@@ -147,12 +147,12 @@ router.post('/auctions', authenticateToken, async (req, res) => {
         if (!title || !description || typeof(currentPrice) !== 'number' || !expiryDate) {
             return res.status(400).json({ status: 'error', message: 'All fields required!' }); 
         }
-
-        // lasciare la data così, tanto traslo solo il controllo (new Date(expiryDate) comunque trasla di un'ora)
         
+        let currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 1);
 
-        if (title.trim() === '' || description.trim() === '' || currentPrice < 0 || new Date(expiryDate) <= new Date()) {
-            message = `Invalid fields! ${currentPrice < 0 ? 'Starting Price must be non negative. ' : ''} ${new Date(expiryDate) <= new Date() ? 'Expiry date must be greater than the current one.' : ''}`;
+        if (title.trim() === '' || description.trim() === '' || currentPrice < 0 || new Date(expiryDate) <= currentDate) {
+            message = `Invalid fields! ${currentPrice < 0 ? 'Starting Price must be non negative. ' : ''} ${new Date(expiryDate) <= currentDate ? 'Expiry date must be greater than the current one.' : ''}`;
             return res.status(400).json({ status: 'error', message });
         }
 
@@ -348,7 +348,6 @@ router.get('/auctions/:id/bids', authenticateToken, async (req, res) => {
         }
 
         const database = await db.connectToDatabase();
-        
         const bids = await database.collection('bids').find({ auctionId }).toArray();
 
         if (bids.length > 0) {
@@ -387,15 +386,13 @@ router.post('/auctions/:id/bids', authenticateToken, async (req, res) => {
 
         const auction = await database.collection("auctions").findOne({ _id: new ObjectId(auctionId) });
 
-        const currentDate = new Date();
-        const expiryDate = new Date(auction.expiryDate.replace(' at ', 'T'));
+        let currentDate = new Date();
+        let expiry = new Date(auction.expiryDate.replace(' at ', 'T'));
 
         currentDate.setHours(currentDate.getHours() + 1);
-        expiryDate.setHours(expiryDate.getHours() + 1);
-
 
         if (auction) {
-            if (currentDate < expiryDate) {
+            if (currentDate < expiry) {
                 if (newPrice > auction.currentPrice) {
                     const auctionResult = await database.collection("auctions").updateOne(
                         { _id: new ObjectId(auctionId) },
@@ -406,7 +403,7 @@ router.post('/auctions/:id/bids', authenticateToken, async (req, res) => {
                             auctionId,
                             user: req.user.username,
                             price: newPrice,
-                            date: `${currentDate.getFullYear()}/${currentDate.getMonth()}/${currentDate.getDate()} at ${currentDate.getHours() - 1}:${currentDate.getMinutes()}:${currentDate.getMinutes()}`
+                            date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1}-${currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate()} at ${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes() < 10 ? `0${currentDate.getMinutes()}` : currentDate.getMinutes()}:${currentDate.getSeconds() < 10 ? `0${currentDate.getSeconds()}` : currentDate.getSeconds()}`
                         });
                         if (bidResult.acknowledged) {
                             return res.status(201).json({
@@ -426,7 +423,7 @@ router.post('/auctions/:id/bids', authenticateToken, async (req, res) => {
                                     AuctionId: auctionId,
                                     User: req.user.username,
                                     Price: `$ ${newPrice}.00`,
-                                    Date: `${currentDate.getFullYear()}/${currentDate.getMonth()}/${currentDate.getDate()} at ${currentDate.getHours() - 1}:${currentDate.getMinutes()}:${currentDate.getMinutes()}`
+                                    Date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1}-${currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate()} at ${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes() < 10 ? `0${currentDate.getMinutes()}` : currentDate.getMinutes()}:${currentDate.getSeconds() < 10 ? `0${currentDate.getSeconds()}` : currentDate.getSeconds()}`
                                 }
                             })
                         } else {
