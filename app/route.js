@@ -523,7 +523,7 @@ try {
         return res.status(400).json({ status: 'error', message: 'All fields required!' });
     }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@$%?])[A-Za-z\d!@$%?]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&?*])[A-Za-z\d!@#$%^&?*]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
     return res.status(400).json({
         status: 'error',
