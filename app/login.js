@@ -39,7 +39,7 @@ router.post("/signup", async (req, res) => {
       return res.status(409).json({ status : 'error',  message: `User "${username}" already existing!` });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12); // 12 = salt CAPIRE A COSA SERVE
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     let newUser = {
         username,
@@ -51,15 +51,11 @@ router.post("/signup", async (req, res) => {
     const result = await database.collection("users").insertOne(newUser);
 
     if (result.acknowledged && result.insertedId) {
-      res.status(201).json({
-      status : 'success', 
-      message: 'User created successfully', 
-      user: {
-        username,
-        name,
-        surname
-      }
-    });
+      const data = { id: user._id.toString(), username };
+      const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 });
+
+      res.cookie("token", token, { httpOnly: true});
+      res.redirect("/dashboard.html");
     } else {
       res.status(500).json({ status: 'error', message: 'Failed to create user' });
     }
@@ -84,7 +80,7 @@ router.post("/signin", async (req, res) => {
       const data = { id: user._id.toString(), username };
       const token = jwt.sign(data, JWT_SECRET, { expiresIn: 86400 });
 
-      res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
+      res.cookie("token", token, { httpOnly: true});
       res.redirect("/dashboard.html");
     } else if (!user) {
       res.status(404).json({ status: 'error', message: 'User not found' });

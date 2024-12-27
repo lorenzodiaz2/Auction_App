@@ -38,7 +38,7 @@
           <input type="password" placeholder="Create a password" v-model="signupForm.password">
           <input type="submit" class="button" value="Signup">
         </form>
-        <p v-if="messages.signup">{{ messages.signup }}</p>
+        <p v-if="messages.signup">{{ messages.signup }} <span class="spinner-border spinner-border-sm" aria-hidden="true"></span></p>
         <p v-if="errorMessages.signup" class="errors">{{ errorMessages.signup }}</p>
         <div class="signup">
           <span class="signup">Already have an account?

@@ -45,7 +45,10 @@ createApp({
         });
         const data = await response.json();
         if (response.ok) {
-          this.messages.signup = `User ${data.user.username} created. Now you can log in!`;
+          this.messages.signin = 'user successfully created!';
+          setTimeout(() => {
+            window.location.href = response.url;
+          }, 2000);
           this.signupForm = { username: '', name: '', surname: '', password: '' };
         } else {
           this.errorMessages.signup = data.message;

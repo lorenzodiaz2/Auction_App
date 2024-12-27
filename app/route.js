@@ -22,7 +22,7 @@ const authenticateToken = (req, res, next) => {
       if (err) {
         return res.status(403).json({ message: "Invalid token" });
       }
-      req.user = decoded; // req.user = { id: STRINGA_ID, username: user.username }
+      req.user = decoded;
       next();
     });
 };
