@@ -19,7 +19,11 @@ Before running the app, ensure you have the following installed:
    Use Docker Compose to build and run the app:  
    ```bash
    docker-compose up --build
-4. **Access the App**  
+4. **Wait until you see in the terminal**
+   ```plaintext
+   | Database initialized
+   | Web server started on http://localhost:3000
+5. **Access the App**  
    Once the app is running, access it in your browser at:  
    ```plaintext
    http://localhost:3000
