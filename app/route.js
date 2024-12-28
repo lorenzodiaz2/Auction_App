@@ -484,7 +484,7 @@ router.get('/bids/:id', authenticateToken, async (req, res) => {
 router.get('/whoami', authenticateToken, async (req, res) => {
     try {
         const database = await db.connectToDatabase();
-        const user = await database.collection("users").findOne({ _id : ObjectId.createFromHexString(req.user.id) });
+        const user = await database.collection("users").findOne({ username : req.user.username });
 
         if (user) {
             return res.status(200).json({
@@ -527,7 +527,7 @@ try {
     if (!passwordRegex.test(newPassword)) {
     return res.status(400).json({
         status: 'error',
-        message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.',
+        message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (!@#$%^&?*).',
     });
     }
 

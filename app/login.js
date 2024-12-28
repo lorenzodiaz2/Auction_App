@@ -24,7 +24,7 @@ router.post("/signup", async (req, res) => {
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         status: 'error',
-        message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.',
+        message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (!@#$%^&?*).',
       });
     }
 
