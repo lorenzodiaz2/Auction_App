@@ -10,7 +10,7 @@ module.exports = {
     }
     try {
       const client = await MongoClient.connect(MONGODB_URI);
-      const db = client.db(DB_NAME);
+      const db = client.db();
       cachedDb = db;
       return db;
     } catch (error) {
