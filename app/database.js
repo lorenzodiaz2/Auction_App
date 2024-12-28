@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-MONGODB_URI='mongodb://mongo:27017';
+const MONGODB_URI = process.env.MONGODB_URI; 
 const DB_NAME = "database";
 let cachedDb;
 

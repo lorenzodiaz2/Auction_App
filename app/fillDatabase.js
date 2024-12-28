@@ -13,10 +13,6 @@ module.exports = {
       return;
     }
 
-    await database.collection('users').deleteMany({});
-    await database.collection('auctions').deleteMany({});
-    await database.collection('bids').deleteMany({});
-
     const users = [
       {
         username: "johnsmith",
