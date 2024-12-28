@@ -8,6 +8,7 @@ services:
       - diaz_mongo
     environment:
       - MONGODB_URI=mongodb://diaz_mongo:27017/database
+      - JWT_SECRET=supersecretkey12345!@
     links:
       - diaz_mongo
   diaz_mongo:

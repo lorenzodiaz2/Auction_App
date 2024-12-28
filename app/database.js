@@ -1,6 +1,5 @@
 const { MongoClient } = require("mongodb");
 const MONGODB_URI = process.env.MONGODB_URI; 
-const DB_NAME = "database";
 let cachedDb;
 
 module.exports = {
