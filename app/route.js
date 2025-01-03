@@ -139,7 +139,9 @@ router.get('/auctions', authenticateToken, async (req, res) => {
 
 router.post('/auctions', authenticateToken, async (req, res) => {
     try {
-        const { title, description, currentPrice, expiryDate } = req.body;         
+        let { title, description, currentPrice, expiryDate } = req.body;
+
+        currentPrice = Math.floor(currentPrice);      
 
         if (!title || !description || typeof(currentPrice) !== 'number' || !expiryDate) {
             return res.status(400).json({ status: 'error', message: 'All fields required!' }); 
@@ -373,7 +375,9 @@ router.get('/auctions/:id/bids', authenticateToken, async (req, res) => {
 router.post('/auctions/:id/bids', authenticateToken, async (req, res) => {
     try {
         const auctionId = req.params.id;
-        const { newPrice } = req.body;
+        let { newPrice } = req.body;
+
+        newPrice = Math.floor(newPrice);
 
         if (!ObjectId.isValid(auctionId)) {
             return res.status(400).json({ status: 'error', message: 'Invalid auction ID format' });
