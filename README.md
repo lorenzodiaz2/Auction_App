@@ -1,6 +1,6 @@
 # Auction App
 
-This is a Node.js application that uses MongoDB as a database, all managed via Docker.
+This is a simple auction application. Follow this steps to try it.
 
 ## Prerequisites
 
