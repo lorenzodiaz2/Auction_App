@@ -21,7 +21,8 @@ app.listen(3000, async () => {
         console.log("Database initialized");
     } catch (error) {
         console.error("Error initializing database");
+    } finally {
+        console.log("Web server started on http://localhost:3000");
     }
-    console.log("Web server started on http://localhost:3000");
 });
 

@@ -14,16 +14,15 @@ Before running the app, ensure you have the following installed:
    ```bash
    git clone https://github.com/lorenzodiaz2/Auction_App.git
    cd Auction_App
-2. **Open Docker**
-3. **Build and Run the App**  
+2. **Open Docker, Build and Run the App**  
    Use Docker Compose to build and run the app:  
    ```bash
    docker-compose up --build
-4. **Wait until you see in the terminal**
+3. **Wait until you see in the terminal**
    ```plaintext
    | Database initialized
    | Web server started on http://localhost:3000
-5. **Access the App**  
+4. **Access the App**  
    Once the app is running, access it in your browser at:  
    ```plaintext
    http://localhost:3000
