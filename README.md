@@ -1,6 +1,6 @@
 # Auction App
 
-This is a simple auction application. Follow this steps to try it.
+This is a simple auction application. Follow this steps to run it.
 
 ## Prerequisites
 
